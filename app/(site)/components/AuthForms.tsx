@@ -1,29 +1,29 @@
 "use client";
-import axios from 'axios';
+import axios from "axios";
 import Button from "@/app/components/buttons/Button";
 import Input from "@/app/components/inputs/Input";
 import { useState, useCallback, useEffect } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
-import AuthSocialButton from './AuthSocialButton';
-import {BsGithub , BsGoogle} from 'react-icons/bs'
-import { toast } from 'react-hot-toast';
-import { signIn , useSession } from 'next-auth/react';
-import {useRouter} from 'next/navigation'
+import AuthSocialButton from "./AuthSocialButton";
+import { BsGithub, BsGoogle } from "react-icons/bs";
+import { toast } from "react-hot-toast";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const AuthForm = () => {
-  const session = useSession()
-  const router = useRouter()
+  const session = useSession();
+  const router = useRouter();
   type Variant = "LOGIN" | "REGISTER";
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setisLoading] = useState(false);
-  
+
   useEffect(() => {
-     console.log(session);
+    console.log(session);
     if (session?.status === "authenticated") {
-      router.push('/users')
+      router.push("/users");
     }
-  }, [session?.status , router]);
-  
+  }, [session?.status, router]);
+
   const toogleVarian = useCallback(() => {
     variant === "LOGIN" ? setVariant("REGISTER") : setVariant("LOGIN");
   }, [variant]);
@@ -45,42 +45,43 @@ const AuthForm = () => {
     if (variant === "REGISTER") {
       axios
         .post("/api/register", data)
-        .then(data => toast.success(data.data.message, { duration : 5000}))
-        .then(() => signIn('credentials', data))
+        .then((data) => toast.success(data.data.message, { duration: 5000 }))
+        .then(() => signIn("credentials", data))
         .catch(() => toast.error("Something went wrong"))
         .finally(() => setisLoading(false));
     }
 
     if (variant === "LOGIN") {
-      signIn('credentials' , {
+      signIn("credentials", {
         ...data,
-        redirect : false
-      }).then((callback) => {
-        if(callback?.error){
-          toast.error('Invalid credentials')
-        }
-        if(callback?.ok && !callback?.error){
-          toast.success('Succes Logged in!')
-           router.push("/users");
-        }
+        redirect: false,
       })
-      .finally(() => setisLoading(false))
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error("Invalid credentials");
+          }
+          if (callback?.ok && !callback?.error) {
+            toast.success("Succes Logged in!");
+            router.push("/users");
+          }
+        })
+        .finally(() => setisLoading(false));
     }
   };
 
   const socialAction = (action: string) => {
     setisLoading(true);
 
-    signIn(action ,{redirect : false})
-    .then((callback) => {
-       if (callback?.error) {
-         toast.error("Invalid credentials");
-       }
-       if (callback?.ok && !callback?.error) {
-         toast.success("Succes Logged in!");
-       }
-    })
-    .finally(() => setisLoading(false))
+    signIn(action, { redirect: false })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error("Invalid credentials");
+        }
+        if (callback?.ok && !callback?.error) {
+          toast.success("Succes Logged in!");
+        }
+      })
+      .finally(() => setisLoading(false));
   };
 
   return (
@@ -164,7 +165,7 @@ const AuthForm = () => {
                px-2 
                text-gray-500"
               >
-                or continue whis
+                or continue with
               </span>
             </div>
           </div>
