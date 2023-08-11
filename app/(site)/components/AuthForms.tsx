@@ -20,9 +20,9 @@ const AuthForm = () => {
   useEffect(() => {
     console.log(session);
     if (session?.status === "authenticated") {
-      router.push("/users");
+      // router.push("/users");
     }
-  }, [session?.status, router, session]);
+  }, [session?.status, session]);
 
   const toogleVarian = useCallback(() => {
     variant === "LOGIN" ? setVariant("REGISTER") : setVariant("LOGIN");
