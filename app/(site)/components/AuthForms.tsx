@@ -54,16 +54,14 @@ const AuthForm = () => {
     if (variant === "LOGIN") {
       signIn("credentials", {
         ...data,
-        redirect: false,
+        redirect: true,
       })
         .then((callback) => {
           if (callback?.error) {
             toast.error("Invalid credentials");
           }
-          if (!callback?.error) {
             toast.success("Succes Logged in!");
             router.push("/users");
-          }
         })
         .finally(() => setisLoading(false));
     }
