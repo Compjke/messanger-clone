@@ -22,7 +22,7 @@ const AuthForm = () => {
     if (session?.status === "authenticated") {
       router.push("/users");
     }
-  }, [session?.status, router]);
+  }, [session?.status, router, session]);
 
   const toogleVarian = useCallback(() => {
     variant === "LOGIN" ? setVariant("REGISTER") : setVariant("LOGIN");
